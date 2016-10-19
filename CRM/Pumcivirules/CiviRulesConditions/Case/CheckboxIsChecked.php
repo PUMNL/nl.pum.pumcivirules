@@ -93,5 +93,25 @@ class CRM_Pumcivirules_CiviRulesConditions_Case_CheckboxIsChecked extends CRM_Ci
     return ts('Checkbox %1 from field %2', array(1=>$value, 2=>$field));
   }
 
+  /**
+   * This function validates whether this condition works with the selected trigger.
+   *
+   * This function could be overriden in child classes to provide additional validation
+   * whether a condition is possible in the current setup. E.g. we could have a condition
+   * which works on contribution or on contributionRecur then this function could do
+   * this kind of validation and return false/true
+   *
+   * @param CRM_Civirules_Trigger $trigger
+   * @param CRM_Civirules_BAO_Rule $rule
+   * @return bool
+   */
+  public function doesWorkWithTrigger(CRM_Civirules_Trigger $trigger, CRM_Civirules_BAO_Rule $rule) {
+    // This condition only works with the trigger case custom data changed
+    if ($trigger instanceof CRM_CivirulesPostTrigger_CaseCustomDataChanged) {
+      return true;
+    }
+    return false;
+  }
+
 
 }
