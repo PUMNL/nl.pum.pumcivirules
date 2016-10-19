@@ -106,7 +106,7 @@ class CRM_Pumcivirules_CiviRulesConditions_Case_CheckboxIsChecked extends CRM_Ci
    * @return bool
    */
   public function doesWorkWithTrigger(CRM_Civirules_Trigger $trigger, CRM_Civirules_BAO_Rule $rule) {
-    // This condition only works with the trigger case custom data changed
+    // This condition only works with the trigger case custom data changed.
     if ($trigger instanceof CRM_CivirulesPostTrigger_CaseCustomDataChanged) {
       return true;
     }
