@@ -14,4 +14,11 @@
         <access_arguments>access CiviCRM</access_arguments>
         <access_arguments>administer CiviCRM</access_arguments>
     </item>
+    <item>
+        <path>civicrm/civirule/form/condition/case/checkboxischecked</path>
+        <page_callback>CRM_Pumcivirules_CiviRulesConditions_Case_Form_CheckboxIsChecked</page_callback>
+        <title>CiviCase: Checkbox is checked</title>
+        <access_arguments>access CiviCRM</access_arguments>
+        <access_arguments>administer CiviCRM</access_arguments>
+    </item>
 </menu>
