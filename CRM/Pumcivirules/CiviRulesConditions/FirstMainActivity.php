@@ -21,14 +21,21 @@ class CRM_Pumcivirules_CiviRulesConditions_FirstMainActivity extends CRM_Civirul
     $projectData = $triggerData->getEntityData('PumProject');
     $caseData = $triggerData->getEntityData('Case');
     if (CRM_Pumcivirules_Utils::isMainActivityCase($caseData['case_type_id'])) {
-      $projectCases = CRM_Threepeas_BAO_PumProject::getCasesByProjectId($projectData['id']);
+      if (empty($projectData)) {
+        $projectId = CRM_Threepeas_BAO_PumCaseProject::getProjectIdWithCaseId($caseData['id']);
+      } else {
+        $projectId = $projectData['id'];
+      }
+      $projectCases = CRM_Threepeas_BAO_PumProject::getCasesByProjectId($projectId);
       foreach ($projectCases as $projectCase) {
-        if ($projectCase['case_id'] != $caseData['id'] && CRM_Pumcivirules_Utils::isMainActivityCase($projectCase['case_type'])) {
+        if ($projectCase['case_id'] == $caseData['id'] && CRM_Pumcivirules_Utils::isMainActivityCase($projectCase['case_type'])) {
+          return TRUE;
+        } elseif ($projectCase['case_id'] != $caseData['id'] && CRM_Pumcivirules_Utils::isMainActivityCase($projectCase['case_type'])) {
           return FALSE;
         }
       }
     }
-    return TRUE;
+    return FALSE;
   }
 
   /**
