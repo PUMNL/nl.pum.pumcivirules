@@ -52,6 +52,23 @@ class CRM_Pumcivirules_CiviRulesConditions_FirstMainActivity extends CRM_Civirul
     return FALSE;
   }
 
+  /**
+   * Overridden parent method checks if condition works with trigger when condition is added
+   * For First Main Activity it does not make sense if case is not one of the provided entities of the trigger
+   *
+   * @param CRM_Civirules_Trigger $trigger
+   * @param CRM_Civirules_BAO_Rule $rule
+   * @return bool
+   */
+  public function doesWorkWithTrigger(CRM_Civirules_Trigger $trigger, CRM_Civirules_BAO_Rule $rule) {
+    $providedEntities = $trigger->getProvidedEntities();
+    foreach ($providedEntities as $entityName => $entityData) {
+      if (strtolower($entityName) == 'case') {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
 
   /**
    * Returns an array with required entity names
