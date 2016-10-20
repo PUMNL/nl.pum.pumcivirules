@@ -8,6 +8,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/action/contact/expertstatus</path>
+    <page_callback>CRM_Pumcivirules_CiviRulesActions_Form_ExpertStatus</page_callback>
+    <title>Set expert status</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/action/drupal/createuser</path>
     <page_callback>CRM_Pumcivirules_CiviRulesActions_Drupal_Form_CreateUserAccount</page_callback>
     <title>Create drupal user account</title>
