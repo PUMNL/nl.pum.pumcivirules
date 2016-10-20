@@ -16,6 +16,7 @@ class CRM_Pumcivirules_Utils {
    * @return bool
    */
   public static function isMainActivityCase($caseTypeId) {
+    $caseTypeId = str_replace(CRM_Core_DAO::VALUE_SEPARATOR, "", $caseTypeId);
     $config = CRM_Threepeas_CaseRelationConfig::singleton();
     $validCaseTypes = $config->getExpertCaseTypes();
     if (in_array($caseTypeId, $validCaseTypes)) {
@@ -69,5 +70,23 @@ class CRM_Pumcivirules_Utils {
       $result[] = $relationshipData;
     }
     return $result;
+  }
+
+  /**
+   * Method to get the case id of the first main activity on a project
+   *
+   * @param int $projectId
+   * @return int|bool
+   * @access public
+   * @static
+   */
+  public static function getFirstMainActivityCaseId($projectId) {
+    $projectCases = CRM_Threepeas_BAO_PumProject::getCasesByProjectId($projectId);
+    foreach ($projectCases as $projectCaseId => $projectCase) {
+      if (self::isMainActivityCase($projectCase['case_type'])) {
+        return $projectCaseId;
+      }
+    }
+    return FALSE;
   }
 }
