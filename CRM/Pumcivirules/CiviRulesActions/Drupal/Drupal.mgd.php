@@ -27,4 +27,17 @@ return array (
           'is_active' => 1
         ),
     ),
+  2 =>
+    array (
+      'name' => 'PUM:PumciviRules:CiviRulesAction.BlockUserAccount',
+      'entity' => 'CiviRuleAction',
+      'params' =>
+        array (
+          'version' => 3,
+          'name' => 'pum_drupal_block_user',
+          'label' => 'Block user account',
+          'class_name' => 'CRM_Pumcivirules_CiviRulesActions_Drupal_BlockUserAccount',
+          'is_active' => 1
+        ),
+    ),
 );
