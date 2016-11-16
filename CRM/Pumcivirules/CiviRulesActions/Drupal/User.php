@@ -47,6 +47,15 @@ class CRM_Pumcivirules_CiviRulesActions_Drupal_User {
     user_save($user, array('roles' => $user_roles));
   }
 
+  public static function blockUserAccount($uid) {
+    $users = entity_load('user', array($uid));
+
+    foreach ($users as $uid => $user) {
+      $user->status = 0;
+      user_save($user);
+    }
+  }
+
   /**
    * Unset roles from a drupal user.
    *
