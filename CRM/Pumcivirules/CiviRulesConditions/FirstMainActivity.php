@@ -20,7 +20,7 @@ class CRM_Pumcivirules_CiviRulesConditions_FirstMainActivity extends CRM_Civirul
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $projectData = $triggerData->getEntityData('PumProject');
     $caseData = $triggerData->getEntityData('Case');
-    if (CRM_Pumcivirules_Utils::isMainActivityCase($caseData['case_type_id'])) {
+    if (isset($caseData['case_type_id']) && CRM_Pumcivirules_Utils::isMainActivityCase($caseData['case_type_id'])) {
       if (empty($projectData)) {
         $projectId = CRM_Threepeas_BAO_PumCaseProject::getProjectIdWithCaseId($caseData['id']);
       } else {
