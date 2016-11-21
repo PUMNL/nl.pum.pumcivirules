@@ -50,12 +50,16 @@ class CRM_Pumcivirules_CiviRulesActions_Drupal_ChangeRole extends CRM_Civirules_
     $drupal_roles_to_add = $action_parameters['roles_to_add'];
     $role_names = user_roles(TRUE);
     $roles_to_remove = array();
-    foreach($drupal_roles_to_remove as $rid) {
-      $roles_to_remove[] = $role_names[$rid];
+    if ($drupal_roles_to_remove && is_array($drupal_roles_to_remove)) {
+      foreach ($drupal_roles_to_remove as $rid) {
+        $roles_to_remove[] = $role_names[$rid];
+      }
     }
     $roles_to_add = array();
-    foreach($drupal_roles_to_add as $rid) {
-      $roles_to_add[] = $role_names[$rid];
+    if ($drupal_roles_to_add && is_array($drupal_roles_to_add)) {
+      foreach ($drupal_roles_to_add as $rid) {
+        $roles_to_add[] = $role_names[$rid];
+      }
     }
     return ts('Roles to remove: %1 and roles to add %2', array(1 => implode(", ", $roles_to_remove), 2 => implode(", ", $roles_to_add)));
   }
