@@ -14,7 +14,7 @@ class CRM_Pumcivirules_CiviRulesConditions_Case_ExpertIsRejected extends CRM_Civ
       $rejectExpertCustomGroupId = civicrm_api3('CustomGroup', 'getvalue', array('name' => 'Assessment_Expert_Application', 'return' => 'id'));
       $rejectExpertCustomField = civicrm_api3('CustomField', 'getsingle', array('name' => 'Reject_Expert_Application', 'custom_group_id' => $rejectExpertCustomGroupId));
       $customFieldKey = 'custom_'.$rejectExpertCustomField['id'];
-      if (isset($case[$customFieldKey]) && isset($originalData[$customFieldKey])) {
+      if (isset($case[$customFieldKey]) && empty($originalData[$customFieldKey])) {
         if (empty($originalData[$customFieldKey]) && !empty($case[$customFieldKey])) {
           return TRUE;
         }
