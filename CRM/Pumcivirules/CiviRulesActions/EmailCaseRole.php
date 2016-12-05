@@ -22,6 +22,12 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
    */
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $this->_caseData = $triggerData->getEntityData('Case');
+    if (!isset($this->_caseData['client_id'][1])) {
+      $this->_caseData['client_id'] = civicrm_api3('Case', 'getvalue', array(
+        'id' => $this->_caseData['case_id'],
+        'return' => 'client_id'
+      ));
+    }
     $this->_caseClientId = (int) $this->_caseData['client_id'][1];
     $this->_availableCaseRoles = CRM_Pumcivirules_Utils::getAvailableCaseRoles();
     // processing only makes sense if we have case in the triggerData

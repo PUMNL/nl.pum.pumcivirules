@@ -31,6 +31,7 @@ class CRM_Pumcivirules_Utils {
    * @return array
    */
   public static function getAvailableCaseRoles() {
+    $result = array();
     // set array with name_a_b and name_b_a of relationship type
     $roles = array(
       array('name_a_b' => 'Anamon', 'name_b_a' => 'Anamon'),
