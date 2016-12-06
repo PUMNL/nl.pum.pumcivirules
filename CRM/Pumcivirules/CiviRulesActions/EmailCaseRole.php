@@ -68,7 +68,7 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
     $result = array();
     foreach ($this->_selectedCaseRoles as $selectedKey => $selectedData) {
       // loop through all case contacts and check if the role equals the selected
-      if (isset($this->_caseData['contact'])) {
+      if (isset($this->_caseData['contacts'])) {
         foreach ($this->_caseData['contacts'] as $caseContact) {
           if ($caseContact['role'] == $selectedData['title']) {
             if (isset($caseContact['email']) && !empty($caseContact['email'])) {
