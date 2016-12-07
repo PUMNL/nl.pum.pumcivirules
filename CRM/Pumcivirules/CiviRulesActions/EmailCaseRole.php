@@ -52,6 +52,11 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
       }
       // determine who to send email to
       $contactIdsToMail = $this->retrieveContactsFromCaseContacts() + $this->retrieveContactsFromOthers();
+      // temp logging
+      $ehtxt = 'Contacts to be mailed : '.implode('; ', $contactIdsToMail);
+      $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
+      CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
+
       foreach ($contactIdsToMail as $contactIdToMail) {
         $emailParams = array(
           'contact_id' => $contactIdToMail,
@@ -137,6 +142,11 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
   private function retrieveContactsFromOthers() {
     $result = array();
     foreach ($this->_selectedCaseRoles as $selectedKey => $selectedData) {
+      // temp logging
+      $ehtxt = 'Selected key is '.$selectedKey.', title is '.$selectedData['title'].' met found is '.$selectedData['found'];
+      $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
+      CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
+
       if (!$selectedData['found']) {
         switch ($selectedData['name_a_b']) {
           // anamon
