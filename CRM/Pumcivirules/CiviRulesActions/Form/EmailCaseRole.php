@@ -48,6 +48,7 @@ class CRM_Pumcivirules_CiviRulesActions_Form_EmailCaseRole extends CRM_Core_Form
     while($dao->fetch()) {
       $return[$dao->id] = $dao->msg_title;
     }
+    asort($return);
     return $return;
   }
   /**
