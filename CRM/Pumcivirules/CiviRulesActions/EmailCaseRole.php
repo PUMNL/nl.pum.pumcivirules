@@ -22,6 +22,14 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
    */
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $this->_caseData = $triggerData->getEntityData('Case');
+
+    // temp logging
+    foreach ($this->_caseData as $caseDataKey => $caseDataValue) {
+      $ehtxt = 'Case data element '.$caseDataKey.' met waarde '.$caseDataValue;
+      $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
+      CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
+    }
+
     if (!isset($this->_caseData['client_id'][1])) {
       $this->_caseData['client_id'] = civicrm_api3('Case', 'getvalue', array(
         'id' => $this->_caseData['case_id'],
@@ -52,6 +60,13 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
           'from_name' => $actionParams['from_name'],
           'case_id' => $this->_caseData['id']
         );
+        // temp logging
+        foreach ($emailParams as $emailKey => $emailValue) {
+          $ehtxt = 'Email params '.$emailKey.' met waarde '.$emailParams;
+          $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
+          CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
+        }
+
         try {
           civicrm_api3('Email', 'send', $emailParams);
         } catch (CiviCRM_API3_Exception $ex) {}
