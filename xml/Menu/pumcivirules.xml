@@ -35,4 +35,10 @@
     <access_arguments>access CiviCRM</access_arguments>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/civirule/form/action/setshowexpert</path>
+    <page_callback>CRM_Pumcivirules_CiviRulesActions_Form_SetShowExpert</page_callback>
+    <title>SetShowExpert</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>
