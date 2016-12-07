@@ -41,6 +41,15 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
     // processing only makes sense if we have case in the triggerData
     if (!empty($this->_caseData)) {
       $actionParams = $this->getActionParameters();
+
+      //temp logging
+      foreach ($actionParams as $actionKey => $actionValue) {
+        $ehtxt = 'Action param key '.$actionKey.' met value '.$actionValue;
+        $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
+        CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
+      }
+
+
       $this->_selectedCaseRoles = array();
       foreach ($actionParams['case_role'] as $selectedCaseRoleId) {
         $selected = array(
@@ -48,6 +57,15 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
           'name_a_b' => $this->_availableCaseRoles[$selectedCaseRoleId]['name_a_b'],
           'found' => FALSE
         );
+
+
+        //temp logging
+        foreach ($selected as $selKey => $selValue) {
+          $ehtxt = 'Selected key '.$selKey.' met value '.$selValue;
+          $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
+          CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
+        }
+
         $this->_selectedCaseRoles[] = $selected;
       }
       // determine who to send email to
@@ -142,11 +160,6 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
   private function retrieveContactsFromOthers() {
     $result = array();
     foreach ($this->_selectedCaseRoles as $selectedKey => $selectedData) {
-      // temp logging
-      $ehtxt = 'Selected key is '.$selectedKey.', title is '.$selectedData['title'].' met found is '.$selectedData['found'];
-      $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
-      CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
-
       if (!$selectedData['found']) {
         switch ($selectedData['name_a_b']) {
           // anamon
@@ -158,6 +171,10 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
             break;
           case 'Expert':
             $foundId = CRM_Threepeas_BAO_PumCaseRelation::getCaseExpert($this->_caseData['case_id']);
+            $ehtxt = 'Expert is '.$foundId;
+            $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
+            CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
+
             break;
           case 'Grant Coordinator':
             $foundId = CRM_Threepeas_BAO_PumCaseRelation::getGrantCoordinatorId($this->_caseClientId);
