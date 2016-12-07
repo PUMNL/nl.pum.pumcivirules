@@ -22,14 +22,6 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
    */
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $this->_caseData = $triggerData->getEntityData('Case');
-
-    // temp logging
-    foreach ($this->_caseData as $caseDataKey => $caseDataValue) {
-      $ehtxt = 'Case data element '.$caseDataKey.' met waarde '.$caseDataValue;
-      $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
-      CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
-    }
-
     if (!isset($this->_caseData['client_id'][1])) {
       $this->_caseData['client_id'] = civicrm_api3('Case', 'getvalue', array(
         'id' => $this->_caseData['case_id'],
@@ -41,15 +33,6 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
     // processing only makes sense if we have case in the triggerData
     if (!empty($this->_caseData)) {
       $actionParams = $this->getActionParameters();
-
-      //temp logging
-      foreach ($actionParams as $actionKey => $actionValue) {
-        $ehtxt = 'Action param key '.$actionKey.' met value '.$actionValue;
-        $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
-        CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
-      }
-
-
       $this->_selectedCaseRoles = array();
       foreach ($actionParams['case_role'] as $selectedCaseRoleId) {
         $selected = array(
@@ -57,24 +40,10 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
           'name_a_b' => $this->_availableCaseRoles[$selectedCaseRoleId]['name_a_b'],
           'found' => FALSE
         );
-
-
-        //temp logging
-        foreach ($selected as $selKey => $selValue) {
-          $ehtxt = 'Selected key '.$selKey.' met value '.$selValue;
-          $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
-          CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
-        }
-
         $this->_selectedCaseRoles[] = $selected;
       }
       // determine who to send email to
       $contactIdsToMail = $this->retrieveContactsFromCaseContacts() + $this->retrieveContactsFromOthers();
-      // temp logging
-      $ehtxt = 'Contacts to be mailed : '.implode('; ', $contactIdsToMail);
-      $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
-      CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
-
       foreach ($contactIdsToMail as $contactIdToMail) {
         $emailParams = array(
           'contact_id' => $contactIdToMail,
@@ -83,13 +52,6 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
           'from_name' => $actionParams['from_name'],
           'case_id' => $this->_caseData['id']
         );
-        // temp logging
-        foreach ($emailParams as $emailKey => $emailValue) {
-          $ehtxt = 'Email params '.$emailKey.' met waarde '.$emailParams;
-          $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
-          CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
-        }
-
         try {
           civicrm_api3('Email', 'send', $emailParams);
         } catch (CiviCRM_API3_Exception $ex) {}
@@ -171,10 +133,6 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
             break;
           case 'Expert':
             $foundId = CRM_Threepeas_BAO_PumCaseRelation::getCaseExpert($this->_caseData['case_id']);
-            $ehtxt = 'Expert is '.$foundId;
-            $sql = 'INSERT INTO ehtest (message) VALUES(%1)';
-            CRM_Core_DAO::executeQuery($sql, array(1 => array($ehtxt, 'String')));
-
             break;
           case 'Grant Coordinator':
             $foundId = CRM_Threepeas_BAO_PumCaseRelation::getGrantCoordinatorId($this->_caseClientId);
