@@ -22,6 +22,12 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
    */
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $this->_caseData = $triggerData->getEntityData('Case');
+    if (!isset($this->_caseData['client_id'][1])) {
+      $this->_caseData['client_id'] = civicrm_api3('Case', 'getvalue', array(
+        'id' => $this->_caseData['case_id'],
+        'return' => 'client_id'
+      ));
+    }
     $this->_caseClientId = (int) $this->_caseData['client_id'][1];
     $this->_availableCaseRoles = CRM_Pumcivirules_Utils::getAvailableCaseRoles();
     // processing only makes sense if we have case in the triggerData
@@ -48,8 +54,7 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
         );
         try {
           civicrm_api3('Email', 'send', $emailParams);
-        } catch (CiviCRM_API3_Exception $ex) {
-        }
+        } catch (CiviCRM_API3_Exception $ex) {}
       }
     }
   }
@@ -63,11 +68,13 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
     $result = array();
     foreach ($this->_selectedCaseRoles as $selectedKey => $selectedData) {
       // loop through all case contacts and check if the role equals the selected
-      foreach ($this->_caseData['contacts'] as $caseContact) {
-        if ($caseContact['role'] == $selectedData['title']) {
-          if (isset($caseContact['email']) && !empty($caseContact['email'])) {
-            $result[] = $caseContact['contact_id'];
-            $this->_selectedCaseRoles[$selectedKey]['found'] = TRUE;
+      if (isset($this->_caseData['contacts'])) {
+        foreach ($this->_caseData['contacts'] as $caseContact) {
+          if ($caseContact['role'] == $selectedData['title']) {
+            if (isset($caseContact['email']) && !empty($caseContact['email'])) {
+              $result[] = $caseContact['contact_id'];
+              $this->_selectedCaseRoles[$selectedKey]['found'] = TRUE;
+            }
           }
         }
       }
@@ -123,6 +130,9 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
             break;
           case 'Country Coordinator is':
             $foundId = CRM_Threepeas_BAO_PumCaseRelation::getCountryCoordinatorId($this->_caseClientId);
+            break;
+          case 'Expert':
+            $foundId = CRM_Threepeas_BAO_PumCaseRelation::getCaseExpert($this->_caseData['case_id']);
             break;
           case 'Grant Coordinator':
             $foundId = CRM_Threepeas_BAO_PumCaseRelation::getGrantCoordinatorId($this->_caseClientId);
