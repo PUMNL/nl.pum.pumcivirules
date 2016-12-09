@@ -35,7 +35,6 @@ class CRM_Pumcivirules_Utils {
     $roles = array(
       array('name_a_b' => 'Anamon', 'name_b_a' => 'Anamon'),
       array('name_a_b' => 'Has authorised', 'name_b_a' => 'Authorised contact for'),
-      array('name_a_b' => 'Business Coordinator', 'name_b_a' => 'Business Coordinator'),
       array('name_a_b' => 'Country Coordinator is', 'name_b_a' => 'Country Coordinator for'),
       array('name_a_b' => 'Counsellor', 'name_b_a' => 'Counsellor'),
       array('name_a_b' => 'Grant Coordinator', 'name_b_a' => 'Grant Coordinator'),
