@@ -82,15 +82,23 @@ class CRM_Pumcivirules_CiviRulesConditions_Case_CheckboxIsChecked extends CRM_Ci
    * @access public
    */
   public function userFriendlyConditionParams() {
-    $custom_field_id = $this->conditionParams['custom_field_id'];
-    $custom_field_value = $this->conditionParams['custom_field_value'];
-    $custom_field = civicrm_api3('CustomField', 'getsingle', array('id' => $custom_field_id));
-    $custom_group = civicrm_api3('CustomGroup', 'getsingle', array('id' => $custom_field['custom_group_id']));
-    $option_value = civicrm_api3('OptionValue', 'getsingle', array('option_group_id' => $custom_field['option_group_id'], 'value' => $custom_field_value));
+    try {
+      $custom_field_id = $this->conditionParams['custom_field_id'];
+      $custom_field_value = $this->conditionParams['custom_field_value'];
+      $custom_field = civicrm_api3('CustomField', 'getsingle', array('id' => $custom_field_id));
+      $custom_group = civicrm_api3('CustomGroup', 'getsingle', array('id' => $custom_field['custom_group_id']));
+      $option_value = civicrm_api3('OptionValue', 'getsingle', array(
+        'option_group_id' => $custom_field['option_group_id'],
+        'value' => $custom_field_value
+      ));
 
-    $field = $custom_group['title'].': '.$custom_field['label'];
-    $value = $option_value['value'];
-    return ts('Checkbox %1 from field %2', array(1=>$value, 2=>$field));
+      $field = $custom_group['title'] . ': ' . $custom_field['label'];
+      $value = $option_value['value'];
+      return ts('Checkbox %1 from field %2', array(1 => $value, 2 => $field));
+    } catch (Exception $e) {
+      // Do nothing
+    }
+    return '';
   }
 
   /**
