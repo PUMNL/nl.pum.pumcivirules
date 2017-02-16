@@ -41,4 +41,10 @@
     <title>SetShowExpert</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/civirule/form/action/setshowproject</path>
+    <page_callback>CRM_Pumcivirules_CiviRulesActions_Form_SetShowProject</page_callback>
+    <title>SetShowProject</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>
