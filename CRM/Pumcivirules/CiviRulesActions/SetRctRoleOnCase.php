@@ -36,11 +36,13 @@ class CRM_Pumcivirules_CiviRulesActions_SetRctRoleOnCase extends CRM_Civirules_A
         }
 
         if (empty($currentRctRelationShipId)) {
+          $today = new DateTime();
           civicrm_api3('Relationship', 'create', array(
             'case_id' => $case['id'],
             'relationship_type_id' => $rctRelationshipTypeId,
             'contact_id_a' => $client_id,
             'contact_id_b' => $rctMemberContactId,
+            'start_date' => $today->format('Ymd'),
             'is_active' => '1',
           ));
         }
