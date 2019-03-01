@@ -37,14 +37,20 @@ class CRM_Pumcivirules_CiviRulesActions_Drupal_User {
     $role_names = user_roles(TRUE);
     $user_roles = $user->roles;
     $changes = 0;
-    foreach($roles as $rid) {
-      if (!isset($user_roles[$rid])) {
-        // The role is not set. Set it.
-        $user_roles[$rid] = $role_names[$rid];
-        $changes++;
+
+    if(is_array($roles) && count($roles)>0){
+      foreach($roles as $rid) {
+        if (!isset($user_roles[$rid])) {
+          // The role is not set. Set it.
+          $user_roles[$rid] = $role_names[$rid];
+          $changes++;
+        }
       }
     }
-    user_save($user, array('roles' => $user_roles));
+
+    if($changes > 0) {
+      user_save($user, array('roles' => $user_roles));
+    }
   }
 
   public static function blockUserAccount($uid) {
@@ -66,6 +72,7 @@ class CRM_Pumcivirules_CiviRulesActions_Drupal_User {
     $user = user_load($uid);
     $user_roles = $user->roles;
     $changes = 0;
+
     foreach($roles as $rid) {
       if (isset($user_roles[$rid])) {
         // The role is not set. Set it.
@@ -73,7 +80,10 @@ class CRM_Pumcivirules_CiviRulesActions_Drupal_User {
         $changes++;
       }
     }
-    user_save($user, array('roles' => $user_roles));
+
+    if($changes > 0) {
+      user_save($user, array('roles' => $user_roles));
+    }
   }
 
   /**

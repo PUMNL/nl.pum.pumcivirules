@@ -45,7 +45,6 @@ class CRM_Pumcivirules_CiviRulesActions_SetExpertStatusEndDate extends CRM_Civir
   public function userFriendlyConditionParams() {
     $params = $this->getActionParameters();
 
-    $status = $statusses[$params['expert_status_end_date']];
     $label = ts('Set expert status end date to date of action');
     return $label;
   }
