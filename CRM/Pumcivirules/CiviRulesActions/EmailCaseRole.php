@@ -34,16 +34,30 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
     if (!empty($this->_caseData)) {
       $actionParams = $this->getActionParameters();
       $this->_selectedCaseRoles = array();
+
       foreach ($actionParams['case_role'] as $selectedCaseRoleId) {
-        $selected = array(
-          'title' => $this->_availableCaseRoles[$selectedCaseRoleId]['title'],
-          'name_a_b' => $this->_availableCaseRoles[$selectedCaseRoleId]['name_a_b'],
-          'found' => FALSE
+        $params = array(
+          'version' => 3,
+          'sequential' => 1,
+          'case_id' => $this->_caseData['case_id'],
+          'relationship_type_id' => $this->_availableCaseRoles[$actionParams['case_role'][0]]['relationship_type_id'],
         );
-        $this->_selectedCaseRoles[] = $selected;
+        $result = civicrm_api('Relationship', 'get', $params);
       }
+
       // determine who to send email to
+      $contactIdsToMail = array();
       $contactIdsToMail = $this->retrieveContactsFromCaseContacts() + $this->retrieveContactsFromOthers();
+
+      foreach($result['values'] as $key => $value){
+        if(!empty($value['contact_id_b']) && !in_array($value['contact_id_b'],$contactIdsToMail)){
+          $contactIdsToMail[] = $value['contact_id_b'];
+        }
+      }
+
+      //Prevent duplicate contacts
+      $contactIdsToMail = array_unique($contactIdsToMail);
+
       foreach ($contactIdsToMail as $contactIdToMail) {
         $emailParams = array(
           'contact_id' => $contactIdToMail,
