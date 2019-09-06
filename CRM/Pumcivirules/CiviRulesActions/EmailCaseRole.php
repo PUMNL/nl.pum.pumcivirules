@@ -35,6 +35,10 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
       $actionParams = $this->getActionParameters();
       $this->_selectedCaseRoles = array();
 
+      // determine who to send email to
+      $contactIdsToMail = array();
+      $contactIdsToMail = $this->retrieveContactsFromCaseContacts() + $this->retrieveContactsFromOthers();
+
       foreach ($actionParams['case_role'] as $selectedCaseRoleId) {
         $params = array(
           'version' => 3,
@@ -43,15 +47,11 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
           'relationship_type_id' => $this->_availableCaseRoles[$actionParams['case_role'][0]]['relationship_type_id'],
         );
         $result = civicrm_api('Relationship', 'get', $params);
-      }
 
-      // determine who to send email to
-      $contactIdsToMail = array();
-      $contactIdsToMail = $this->retrieveContactsFromCaseContacts() + $this->retrieveContactsFromOthers();
-
-      foreach($result['values'] as $key => $value){
-        if(!empty($value['contact_id_b']) && !in_array($value['contact_id_b'],$contactIdsToMail)){
-          $contactIdsToMail[] = $value['contact_id_b'];
+        foreach($result['values'] as $key => $value){
+          if(!empty($value['contact_id_b']) && !in_array($value['contact_id_b'],$contactIdsToMail)){
+            $contactIdsToMail[] = $value['contact_id_b'];
+          }
         }
       }
 
