@@ -22,9 +22,10 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
    */
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $this->_caseData = $triggerData->getEntityData('Case');
+
     if (!isset($this->_caseData['client_id'][1])) {
       $this->_caseData['client_id'] = civicrm_api3('Case', 'getvalue', array(
-        'id' => $this->_caseData['case_id'],
+        'id' => $this->_caseData['id'],
         'return' => 'client_id'
       ));
     }
@@ -148,7 +149,7 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
             $foundId = CRM_Threepeas_BAO_PumCaseRelation::getCountryCoordinatorId($this->_caseClientId);
             break;
           case 'Expert':
-            $foundId = CRM_Threepeas_BAO_PumCaseRelation::getCaseExpert($this->_caseData['case_id']);
+            $foundId = CRM_Threepeas_BAO_PumCaseRelation::getCaseExpert($this->_caseData['id']);
             break;
           case 'Grant Coordinator':
             $foundId = CRM_Threepeas_BAO_PumCaseRelation::getGrantCoordinatorId($this->_caseClientId);
