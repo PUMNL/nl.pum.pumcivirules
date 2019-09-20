@@ -31,7 +31,9 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
     $this->_caseClientId = (int) $this->_caseData['client_id'][1];
     $this->_availableCaseRoles = CRM_Pumcivirules_Utils::getAvailableCaseRoles();
     // processing only makes sense if we have case in the triggerData
+
     if (!empty($this->_caseData)) {
+
       $actionParams = $this->getActionParameters();
       $this->_selectedCaseRoles = array();
 
@@ -43,7 +45,7 @@ class CRM_Pumcivirules_CiviRulesActions_EmailCaseRole extends CRM_Civirules_Acti
         $params = array(
           'version' => 3,
           'sequential' => 1,
-          'case_id' => $this->_caseData['case_id'],
+          'case_id' => $this->_caseData['id'],
           'relationship_type_id' => $this->_availableCaseRoles[$actionParams['case_role'][0]]['relationship_type_id'],
         );
         $result = civicrm_api('Relationship', 'get', $params);
